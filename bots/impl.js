@@ -7,8 +7,8 @@ const config = {
   addressEtherDelta: '0x8d12a197cb00d4747a1fe03395095ce2a5cc6819',
   provider: 'https://mainnet.infura.io/Ky03pelFIxoZdAUsr82w',
   socketURL: 'https://socket.etherdelta.com',
-  token: '0xc3951d77737733174152532e8b0f27e2c4e9f0dc',
-  sleepTime: 7,
+  token: process.argv[2],
+  sleepTime: 3,
   gasLimit: 150000,
   gasPrice: 4000000000,
 };
