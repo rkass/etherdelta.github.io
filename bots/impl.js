@@ -28,14 +28,14 @@ service.socket.on('market', (data) => {
 });
 
 makeCall = () => {
-  service.socket.emit('getMarket', {'token': '0xc3951d77737733174152532e8b0f27e2c4e9f0dc'});
+  service.socket.emit('getMarket', {'token': config.token});
 }
 
 canArbitrate = (orders) => {
   return orders['sells'][0]['price'] < orders['buys'][0]['price'];
 }
 
-module.exports = {"service": service, "canArbitrate": canArbitrate, "makeCall": makeCall}
+module.exports = {"service": service, "canArbitrate": canArbitrate, "makeCall": makeCall, "config": config}
 service.noOrdersAvailable = 0;
 service.canArbitrate = 0;
 service.cantArbitrate = 0;
