@@ -16,23 +16,19 @@ const config = {
 service.init(config)
 
 service.socket.on('market', (data) => {
-    console.log("rexeived");
-    console.log(data);
-    console.log("\n\n\n\n");
-    console.log(data['orders']);
-    if (! ('orders' in data)) {
-      console.log('no orders available');
-    }
-    else if (canArbitrate(data['orders'])) {
-      console.log("CAN ARBITRATE!!!!!!\n\n\n\n\n\n\n\n\n\n\n");
-    }
-    else {
-      console.log("can't arbitrate");
-    }
+  if (! ('orders' in data)) {
+	service.noOrdersAvailable += 1;
+  }
+  else if (canArbitrate(data['orders'])) {
+    service.canArbitrate += 1
+  }
+  else {
+    service.cantArbitrate += 1
+  }
 });
 
-makeCall = (service2) => {
-  service2.socket.emit('getMarket', {'token': '0xc3951d77737733174152532e8b0f27e2c4e9f0dc'});
+makeCall = () => {
+  service.socket.emit('getMarket', {'token': '0xc3951d77737733174152532e8b0f27e2c4e9f0dc'});
 }
 
 canArbitrate = (orders) => {
@@ -40,10 +36,15 @@ canArbitrate = (orders) => {
 }
 
 module.exports = {"service": service, "canArbitrate": canArbitrate, "makeCall": makeCall}
+service.noOrdersAvailable = 0;
+service.canArbitrate = 0;
+service.cantArbitrate = 0;
 
-//while(true) {
-//  makeCall(service);
-//  console.log("Sleeping for " + 3 + " seconds");
-//  sleep.sleep(3);
-//}
+run = () => {
+	makeCall();
+	console.log("No orders available: " + service.noOrdersAvailable + 
+      "\nCan Arbitrate: " + service.canArbitrate + 
+      "\nCan't arbitrate: " + service.cantArbitrate);
+}
 
+setInterval(run, config.sleepTime * 1000);
